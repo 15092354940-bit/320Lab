@@ -2,7 +2,7 @@
 const firebaseConfig = {
   apiKey: "AIzaSyAq5o0BHzzLyCcrp7epVJYnVniPztqY3xM",
   authDomain: "lab-47a39.firebaseapp.com",
-  databaseURL: "https://lab-47a39.firebaseio.com",
+  databaseURL: "https://lab-47a39-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "lab-47a39",
   storageBucket: "lab-47a39.firebasestorage.app",
   messagingSenderId: "757983198580",
