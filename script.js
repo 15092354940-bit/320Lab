@@ -1,3 +1,18 @@
+// Firebase 配置 - 需要替换为你自己的配置
+const firebaseConfig = {
+  apiKey: "AIzaSyAq5o0BHzzLyCcrp7epVJYnVniPztqY3xM",
+  authDomain: "lab-47a39.firebaseapp.com",
+  databaseURL: "https://lab-47a39.firebaseio.com",
+  projectId: "lab-47a39",
+  storageBucket: "lab-47a39.firebasestorage.app",
+  messagingSenderId: "757983198580",
+  appId: "1:757983198580:web:b727a849f1dd4f0f890021"
+};
+
+// 初始化 Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 const instrumentsSeed = [
   { id: "ecs-01", name: "1号电化学工作站", alias: "紫外那台", category: "电化学", location: "实验室", rules: "默认按时段预约；如需长时间测试，建议提前备注实验类型与预计时长。", quantity: 1, quantityDisplay: "1台" },
   { id: "ecs-02", name: "2号电化学工作站", alias: "RDE那台", category: "电化学", location: "实验室", rules: "涉及 RDE 测试时，请同步确认旋转圆盘电极是否可用。", quantity: 1, quantityDisplay: "1台" },
