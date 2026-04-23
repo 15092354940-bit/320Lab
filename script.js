@@ -1,18 +1,3 @@
-// Firebase 配置 - 需要替换为你自己的配置
-const firebaseConfig = {
-  apiKey: "AIzaSyAq5o0BHzzLyCcrp7epVJYnVniPztqY3xM",
-  authDomain: "lab-47a39.firebaseapp.com",
-  databaseURL: "https://lab-47a39.firebaseio.com",
-  projectId: "lab-47a39",
-  storageBucket: "lab-47a39.firebasestorage.app",
-  messagingSenderId: "757983198580",
-  appId: "1:757983198580:web:b727a849f1dd4f0f890021"
-};
-
-// 初始化 Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
 const instrumentsSeed = [
   { id: "ecs-01", name: "1号电化学工作站", alias: "紫外那台", category: "电化学", location: "实验室", rules: "默认按时段预约；如需长时间测试，建议提前备注实验类型与预计时长。", quantity: 1, quantityDisplay: "1台" },
   { id: "ecs-02", name: "2号电化学工作站", alias: "RDE那台", category: "电化学", location: "实验室", rules: "涉及 RDE 测试时，请同步确认旋转圆盘电极是否可用。", quantity: 1, quantityDisplay: "1台" },
@@ -367,18 +352,15 @@ function createBookingCard(booking) {
 }
 
 function bindCancelButtons(scope) {
-   scope.querySelectorAll(".cancel-btn").forEach((btn) => {
-     btn.addEventListener("click", () => {
-       const id = btn.dataset.id;
-       db.ref('bookings/' + id).remove().then(() => {
-         state.message = "预约已取消。";
-       }).catch((error) => {
-         state.message = "取消失败：" + error.message;
-         renderMessage();
-       });
-     });
-   });
- }
+  scope.querySelectorAll(".cancel-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = Number(btn.dataset.id);
+      state.bookings = state.bookings.filter((item) => item.id !== id);
+      state.message = "预约已取消。";
+      render();
+    });
+  });
+}
 
 function renderDayBookings() {
   const dayBookings = getDayBookings();
@@ -548,45 +530,41 @@ function renderForm() {
 }
 
 function handleReserve() {
-   const currentInstrument = getCurrentInstrument();
+  const currentInstrument = getCurrentInstrument();
 
-   if (!currentInstrument || !state.user.trim() || !state.purpose.trim()) {
-     state.message = "请先填写完整的预约人和用途信息。";
-     renderMessage();
-     return;
-   }
+  if (!currentInstrument || !state.user.trim() || !state.purpose.trim()) {
+    state.message = "请先填写完整的预约人和用途信息。";
+    renderMessage();
+    return;
+  }
 
-   if (getInvalidTimeRange()) {
-     state.message = "预约失败：请输入正确的 24 小时制时间，且结束时间需晚于开始时间。支持 24:00 作为结束时间。";
-     renderMessage();
-     renderStatusBox();
-     return;
-   }
+  if (getInvalidTimeRange()) {
+    state.message = "预约失败：请输入正确的 24 小时制时间，且结束时间需晚于开始时间。支持 24:00 作为结束时间。";
+    renderMessage();
+    renderStatusBox();
+    return;
+  }
 
-   const conflict = getConflict();
-   if (conflict) {
-     state.message = `预约失败：当前时间段与 ${conflict.user} 的 ${conflict.slot} 冲突。`;
-     renderMessage();
-     renderStatusBox();
-     return;
-   }
+  const conflict = getConflict();
+  if (conflict) {
+    state.message = `预约失败：当前时间段与 ${conflict.user} 的 ${conflict.slot} 冲突。`;
+    renderMessage();
+    renderStatusBox();
+    return;
+  }
 
-   const newBooking = {
-     instrumentId: state.selectedInstrument,
-     user: state.user.trim(),
-     date: state.date,
-     slot: getSlot(),
-     purpose: state.purpose.trim()
-   };
+  state.bookings.push({
+    id: Date.now(),
+    instrumentId: state.selectedInstrument,
+    user: state.user.trim(),
+    date: state.date,
+    slot: getSlot(),
+    purpose: state.purpose.trim()
+  });
 
-   db.ref('bookings').push(newBooking).then(() => {
-     state.message = "预约成功，当前时间段已为你锁定。";
-     render();
-   }).catch((error) => {
-     state.message = "预约失败：" + error.message;
-     renderMessage();
-   });
- }
+  state.message = "预约成功，当前时间段已为你锁定。";
+  render();
+}
 
 function bindEvents() {
   els.searchInput.addEventListener("input", (e) => {
@@ -652,24 +630,10 @@ function render() {
 }
 
 function init() {
-   runSelfTests();
-   renderCategories();
-   bindEvents();
-   
-   db.ref('bookings').on('value', (snapshot) => {
-     state.bookings = [];
-     snapshot.forEach((child) => {
-       state.bookings.push({
-         id: child.key,
-         ...child.val()
-       });
-     });
-     render();
-   }, (error) => {
-     console.error("Firebase 数据加载失败:", error);
-     state.bookings = [...bookingsSeed];
-     render();
-   });
- }
+  runSelfTests();
+  renderCategories();
+  bindEvents();
+  render();
+}
 
- init();
+init();
