@@ -578,117 +578,37 @@ textarea {
   font-size: 14px;
 }
 
-.user-red-card {
-  background: #fef2f2;
-  border-color: #fecaca;
-  color: #991b1b;
-}
-.user-red-badge {
-  background: #fee2e2;
-  border-color: #fecaca;
-  color: #b91c1c;
-}
-.user-red-subtle {
-  color: #b91c1c;
-}
+.user-red-card { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+.user-red-badge { background: #fee2e2; border-color: #fecaca; color: #b91c1c; }
+.user-red-subtle { color: #b91c1c; }
 
-.user-orange-card {
-  background: #fff7ed;
-  border-color: #fed7aa;
-  color: #9a3412;
-}
-.user-orange-badge {
-  background: #ffedd5;
-  border-color: #fed7aa;
-  color: #c2410c;
-}
-.user-orange-subtle {
-  color: #c2410c;
-}
+.user-orange-card { background: #fff7ed; border-color: #fed7aa; color: #9a3412; }
+.user-orange-badge { background: #ffedd5; border-color: #fed7aa; color: #c2410c; }
+.user-orange-subtle { color: #c2410c; }
 
-.user-amber-card {
-  background: #fffbeb;
-  border-color: #fde68a;
-  color: #92400e;
-}
-.user-amber-badge {
-  background: #fef3c7;
-  border-color: #fde68a;
-  color: #b45309;
-}
-.user-amber-subtle {
-  color: #b45309;
-}
+.user-amber-card { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+.user-amber-badge { background: #fef3c7; border-color: #fde68a; color: #b45309; }
+.user-amber-subtle { color: #b45309; }
 
-.user-emerald-card {
-  background: #ecfdf5;
-  border-color: #a7f3d0;
-  color: #065f46;
-}
-.user-emerald-badge {
-  background: #d1fae5;
-  border-color: #a7f3d0;
-  color: #047857;
-}
-.user-emerald-subtle {
-  color: #047857;
-}
+.user-emerald-card { background: #ecfdf5; border-color: #a7f3d0; color: #065f46; }
+.user-emerald-badge { background: #d1fae5; border-color: #a7f3d0; color: #047857; }
+.user-emerald-subtle { color: #047857; }
 
-.user-sky-card {
-  background: #f0f9ff;
-  border-color: #bae6fd;
-  color: #075985;
-}
-.user-sky-badge {
-  background: #e0f2fe;
-  border-color: #bae6fd;
-  color: #0369a1;
-}
-.user-sky-subtle {
-  color: #0369a1;
-}
+.user-sky-card { background: #f0f9ff; border-color: #bae6fd; color: #075985; }
+.user-sky-badge { background: #e0f2fe; border-color: #bae6fd; color: #0369a1; }
+.user-sky-subtle { color: #0369a1; }
 
-.user-blue-card {
-  background: #eff6ff;
-  border-color: #bfdbfe;
-  color: #1e3a8a;
-}
-.user-blue-badge {
-  background: #dbeafe;
-  border-color: #bfdbfe;
-  color: #1d4ed8;
-}
-.user-blue-subtle {
-  color: #1d4ed8;
-}
+.user-blue-card { background: #eff6ff; border-color: #bfdbfe; color: #1e3a8a; }
+.user-blue-badge { background: #dbeafe; border-color: #bfdbfe; color: #1d4ed8; }
+.user-blue-subtle { color: #1d4ed8; }
 
-.user-violet-card {
-  background: #f5f3ff;
-  border-color: #ddd6fe;
-  color: #5b21b6;
-}
-.user-violet-badge {
-  background: #ede9fe;
-  border-color: #ddd6fe;
-  color: #6d28d9;
-}
-.user-violet-subtle {
-  color: #6d28d9;
-}
+.user-violet-card { background: #f5f3ff; border-color: #ddd6fe; color: #5b21b6; }
+.user-violet-badge { background: #ede9fe; border-color: #ddd6fe; color: #6d28d9; }
+.user-violet-subtle { color: #6d28d9; }
 
-.user-pink-card {
-  background: #fdf2f8;
-  border-color: #fbcfe8;
-  color: #9d174d;
-}
-.user-pink-badge {
-  background: #fce7f3;
-  border-color: #fbcfe8;
-  color: #be185d;
-}
-.user-pink-subtle {
-  color: #be185d;
-}
+.user-pink-card { background: #fdf2f8; border-color: #fbcfe8; color: #9d174d; }
+.user-pink-badge { background: #fce7f3; border-color: #fbcfe8; color: #be185d; }
+.user-pink-subtle { color: #be185d; }
 
 @media (max-width: 1100px) {
   .main-layout {
