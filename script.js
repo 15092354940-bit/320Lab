@@ -1,4 +1,3 @@
-// Firebase 配置 - 需要替换为你自己的配置
 const firebaseConfig = {
   apiKey: "AIzaSyAq5o0BHzzLyCcrp7epVJYnVniPztqY3xM",
   authDomain: "lab-47a39.firebaseapp.com",
@@ -9,7 +8,6 @@ const firebaseConfig = {
   appId: "1:757983198580:web:b727a849f1dd4f0f890021"
 };
 
-// 初始化 Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
