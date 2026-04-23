@@ -30,12 +30,6 @@ const instrumentsSeed = [
   { id: "fume-reflux-01", name: "通风橱回流系统", alias: "回流装置", category: "合成装置", location: "实验室", rules: "建议与加热套或油浴锅联动预约，防止装置与热源时间冲突。", quantity: 1, quantityDisplay: "1套" }
 ];
 
-const bookingsSeed = [
-  { id: 1, instrumentId: "ecs-01", user: "Lin", date: "2026-04-23", slot: "09:00-11:00", purpose: "CV 与 EIS 测试" },
-  { id: 2, instrumentId: "ecs-02", user: "Wang", date: "2026-04-23", slot: "14:00-16:00", purpose: "RDE 极化曲线测试" },
-  { id: 3, instrumentId: "hplc-01", user: "Zhao", date: "2026-04-24", slot: "10:00-12:00", purpose: "产物定量分析" }
-];
-
 const userColorPalette = [
   { card: "user-red-card", badge: "user-red-badge", subtle: "user-red-subtle" },
   { card: "user-orange-card", badge: "user-orange-badge", subtle: "user-orange-subtle" },
@@ -56,11 +50,11 @@ const weekCalendarRows = Array.from({ length: 24 }, (_, index) => {
 const calendarWeekHeaders = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
 
 const state = {
-  bookings: [...bookingsSeed],
+  bookings: [],
   query: "",
   category: "all",
   selectedInstrument: "ecs-01",
-  date: "2026-04-23",
+  date: "",
   startTime: "09:00",
   endTime: "11:00",
   user: "Lin",
@@ -367,10 +361,17 @@ function createBookingCard(booking) {
 function bindCancelButtons(scope) {
   scope.querySelectorAll(".cancel-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const id = Number(btn.dataset.id);
-      state.bookings = state.bookings.filter((item) => item.id !== id);
-      state.message = "预约已取消。";
-      render();
+      const id = btn.dataset.id;
+      db.ref("bookings/" + id)
+        .remove()
+        .then(() => {
+          state.message = "预约已取消。";
+          renderMessage();
+        })
+        .catch((error) => {
+          state.message = "取消失败：" + error.message;
+          renderMessage();
+        });
     });
   });
 }
@@ -379,8 +380,7 @@ function renderDayBookings() {
   const dayBookings = getDayBookings();
 
   if (dayBookings.length === 0) {
-    const empty = `<div class="empty-text">所选日期暂无预约记录，可直接预约。</div>`;
-    els.dayBookingList.innerHTML = empty;
+    els.dayBookingList.innerHTML = `<div class="empty-text">所选日期暂无预约记录，可直接预约。</div>`;
     els.dayScheduleList.innerHTML = `<div class="empty-text">当日暂无预约。</div>`;
     return;
   }
@@ -420,8 +420,8 @@ function renderWeekCalendar() {
           `).join("")}
         </div>
 
-        ${weeklyGrid.map((row, rowIndex) => `
-          <div class="week-row ${rowIndex !== weeklyGrid.length - 1 ? "" : ""}">
+        ${weeklyGrid.map((row) => `
+          <div class="week-row">
             <div class="week-time-cell">${row.timeSlot}</div>
             ${row.cells.map((cell) => `
               <div class="week-cell">
@@ -566,17 +566,24 @@ function handleReserve() {
     return;
   }
 
-  state.bookings.push({
-    id: Date.now(),
+  const newBooking = {
     instrumentId: state.selectedInstrument,
     user: state.user.trim(),
     date: state.date,
     slot: getSlot(),
     purpose: state.purpose.trim()
-  });
+  };
 
-  state.message = "预约成功，当前时间段已为你锁定。";
-  render();
+  db.ref("bookings")
+    .push(newBooking)
+    .then(() => {
+      state.message = "预约成功，当前时间段已为你锁定。";
+      renderMessage();
+    })
+    .catch((error) => {
+      state.message = "预约失败：" + error.message;
+      renderMessage();
+    });
 }
 
 function bindEvents() {
@@ -642,11 +649,38 @@ function render() {
   renderCalendar();
 }
 
+function initDefaultDate() {
+  if (!state.date) {
+    const now = new Date();
+    state.date = formatDateKey(now);
+  }
+}
+
 function init() {
   runSelfTests();
+  initDefaultDate();
   renderCategories();
   bindEvents();
-  render();
+
+  db.ref("bookings").on(
+    "value",
+    (snapshot) => {
+      const list = [];
+      snapshot.forEach((child) => {
+        list.push({
+          id: child.key,
+          ...child.val()
+        });
+      });
+      state.bookings = list;
+      render();
+    },
+    (error) => {
+      console.error("Firebase 数据加载失败:", error);
+      state.message = "数据库读取失败：" + error.message;
+      render();
+    }
+  );
 }
 
 init();
